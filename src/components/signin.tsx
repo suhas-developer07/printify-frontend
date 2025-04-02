@@ -29,7 +29,7 @@ export function LoginForm({
 }
 
 // sending request to backend
-  async function handlesubmit(event:React.FormEvent<HTMLFormElement>){
+  async function handlesubmit(event:React.FormEvent<HTMLFormElement>):Promise<void>{
     event.preventDefault();
     try{
       const response=await axios.post("http://localhost:3000/api/v1/users/signin",{
@@ -46,9 +46,9 @@ export function LoginForm({
         setError("Login failed. Please try again.")
       }
 
-      }catch(error){
-        console.error("Login error:", error.response?.data || error.message);
-        setError(error.response?.data?.message || "Invalid credentials or request error");
+      }catch(error:any){
+        console.error("Login error:", error.response?.data.message || error.message);
+        setError(error.response?.data?.message );
       }
     }
 
@@ -79,25 +79,26 @@ export function LoginForm({
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="/forgotpassowrd"
-                    className="ml-30  inline-block text-sm underline-offset-4 hover:underline "
-                  >
-                    Forgot your password?
-                  </a>
                 </div>
-                <div className="flex ">
+                <div className="flex">
                 <Input 
                    id="password" 
                    type={showpassword? "text":"password"} 
                    required 
-                   className="w-84"
+                   className="w-65 sm:w-84"
                    value={Password}
                    onChange={(e)=>setPassword(e.target.value)} />
                  <div className="-translate-x-9 " onClick={togglePassword}>
                  {showpassword? <EyeOpen/> : <EyeClose/>}
                  </div>
                  </div>
+                 <a
+                    href="/forgotpassword"
+                    className=" inline-block text-sm underline-offset-4 hover:underline "
+                  >
+                    Forgot your password?
+                  </a>
+                
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full" onClick={handlesubmit}>

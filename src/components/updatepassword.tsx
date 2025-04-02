@@ -12,22 +12,40 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { EyeOpen, EyeClose } from "@/icons/eyeicon"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
+// import axios from "axios"
+// import { useNavigate } from "react-router-dom"; 
 
 
 
-export function RegistrationForm({
+export function UpdatePassword({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-      const [email,setemail]=useState("");
-      const [Username,setUsername]=useState("");
       const [Password,setPassword]=useState("");
       const [confirmPassword,setconfirmPassword]=useState("");
       const [showpassword,setshowpassword]=useState(false);
       const [showConfirmPassword,setshowConfirmPassword]=useState(false);
       const [Error ,setError]=useState("")
-      const navigate=useNavigate();
+      const location = useLocation();
+      const email = location.state?.email || "No Email Provided"; 
+    //   const navigate=useNavigate();
+
+    async function handlesubmit(event:React.FormEvent<HTMLFormElement>){
+      event.preventDefault();
+      if(Password!==confirmPassword){
+        return setError("password is not matching")
+      }
+      try {
+        const response=await axios.post("http://localhost:3000/api/v1/users/resetpasswordotp",{
+            email:email,
+            password:Password
+        })
+        console.log(response)
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
       const togglePassword=()=>{
         setshowpassword(!showpassword);
@@ -36,69 +54,23 @@ export function RegistrationForm({
       setshowConfirmPassword(!showConfirmPassword)
     }
 
-   async  function handlesubmit(event:any){
-
-      event.preventDefault();
-      console.log(Username);
-      if(Password!==confirmPassword){
-        return setError("password do not matching")
-      }
-      try{
-        const response=await axios.post("http://localhost:3000/api/v1/users/signup",{
-          username:Username,
-          email,
-          password:Password
-        })
-        console.log(response);
-        if(response.data.newuser){
-          navigate("/signin");
-        }else{
-          setError("signup failed.please try again")
-        }
-      }catch(error:any){
-        
-        console.error(error);
-        setError(error.response.data.message)
-        setError(error.response.data.error.message);
-      }
-    }
   return (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <div className="w-full max-w-sm">
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Create an Account</CardTitle>
+          <CardTitle>Reset Password</CardTitle>
           <CardDescription>
-          Enter the details below to create an account
+          Enter new password in below fields
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  placeholder="Enter Username "
-                  value={Username}
-                  onChange={(e)=>setUsername(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={email}
-                  onChange={(e)=>setemail(e.target.value)}
-                  required
-                />
-              </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>  
+                  <Label htmlFor="password"> New Password</Label>  
                 </div>
                 <div className="flex">
                 <Input 
@@ -115,7 +87,7 @@ export function RegistrationForm({
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Confirm Password</Label>  
+                  <Label htmlFor="password">Confirm New Password</Label>  
                 </div>
                 <div className="flex ">
                 <Input id="password" type={showConfirmPassword? "text":"password"} required className="w-65 sm:w-84"
@@ -127,23 +99,19 @@ export function RegistrationForm({
                  </div>
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full" onClick={handlesubmit}>
-                  Signup
+                <Button type="submit" className="w-full">
+                  Update Password
                 </Button>
               </div>
-              <div className=" text-center text-sm">
-              Already have an account?{" "}
-              <a href="/signin" className="underline underline-offset-4">
-                Sign in
-              </a>
-            </div>
             </div>
           </form>
            {/* Show error message if exists */}
-           {Error && <p style={{ color: "red" }}>{Error}</p>}
+           {/* {Error && <p style={{ color: "red" }}>{Error}</p>} */}
         </CardContent>
 
       </Card>
+    </div>
+    </div>
     </div>
   )
 }
