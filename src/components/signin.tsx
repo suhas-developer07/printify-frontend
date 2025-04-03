@@ -13,6 +13,7 @@ import { useState } from "react"
 import { EyeOpen, EyeClose } from "@/icons/eyeicon"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 export function LoginForm({
   className,
@@ -29,7 +30,7 @@ export function LoginForm({
 }
 
 // sending request to backend
-  async function handlesubmit(event:React.FormEvent<HTMLFormElement>):Promise<void>{
+  async function handlesubmit(event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>):Promise<void>{
     event.preventDefault();
     try{
       const response=await axios.post("http://localhost:3000/api/v1/users/signin",{
@@ -51,6 +52,10 @@ export function LoginForm({
         setError(error.response?.data?.message );
       }
     }
+
+    function handleGoogleLogin(){
+     window.location.href="http://localhost:3000/api/v1/users/auth/google";
+    };
 
   
   return (
@@ -92,28 +97,28 @@ export function LoginForm({
                  {showpassword? <EyeOpen/> : <EyeClose/>}
                  </div>
                  </div>
-                 <a
-                    href="/forgotpassword"
+                 <Link
+                   to="/forgotpassword"
                     className=" inline-block text-sm underline-offset-4 hover:underline "
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full" onClick={handlesubmit}>
+                <Button type="submit" className="w-full transition-all duration-200 transform hover:-translate-0.5" onClick={handlesubmit}>
                   Login
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full transition-all duration-200 transform hover:-translate-0.5" onClick={handleGoogleLogin}>
                   Login with Google
                 </Button>
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="/signup" className="underline underline-offset-4">
+              <Link to="/signup" className="underline underline-offset-4">
                 Sign up
-              </a>
+              </Link>
             </div>
               {/* Show error message if exists */}
               {Error && <p style={{ color: "red" }}>{Error}</p>}

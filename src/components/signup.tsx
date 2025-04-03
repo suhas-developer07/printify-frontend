@@ -13,7 +13,7 @@ import { useState } from "react"
 import { EyeOpen, EyeClose } from "@/icons/eyeicon"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"; 
-
+import { Link } from "react-router-dom";
 
 
 export function RegistrationForm({
@@ -36,7 +36,7 @@ export function RegistrationForm({
       setshowConfirmPassword(!showConfirmPassword)
     }
 
-   async  function handlesubmit(event:any){
+   async  function handlesubmit(event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>){
 
       event.preventDefault();
       console.log(Username);
@@ -127,15 +127,15 @@ export function RegistrationForm({
                  </div>
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full" onClick={handlesubmit}>
+                <Button type="submit" className="w-full transition-all duration-200 transform hover:-translate-0.5" onClick={handlesubmit}>
                   Signup
                 </Button>
               </div>
               <div className=" text-center text-sm">
               Already have an account?{" "}
-              <a href="/signin" className="underline underline-offset-4">
+              <Link to="/signin" className="underline underline-offset-4">
                 Sign in
-              </a>
+              </Link>
             </div>
             </div>
           </form>

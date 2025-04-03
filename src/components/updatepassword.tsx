@@ -31,7 +31,7 @@ export function UpdatePassword({
       const email = location.state?.email || "No Email Provided"; 
     //   const navigate=useNavigate();
 
-    async function handlesubmit(event:React.FormEvent<HTMLFormElement>){
+    async function handlesubmit(event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>){
       event.preventDefault();
       if(Password!==confirmPassword){
         return setError("password is not matching")
@@ -99,7 +99,7 @@ export function UpdatePassword({
                  </div>
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" onClick={handlesubmit}>
                   Update Password
                 </Button>
               </div>

@@ -10,9 +10,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
-import { Loading, LoadingSpinner} from "@/icons/loading"
+import {  LoadingSpinner} from "@/icons/loading"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+ 
 
 export function Forgettenpassword({
   className,
@@ -26,7 +28,7 @@ export function Forgettenpassword({
 
 
 // sending request to backend
-async function handlesubmit(event:any){
+async function handlesubmit(event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>){
     event.preventDefault();
     if(email===""){
       setError("please enter an email");
@@ -44,7 +46,7 @@ async function handlesubmit(event:any){
         navigate("/enterOtp",{state:{email}});
     } catch (error:any) {
         console.error(error.response.data.message);
-        setError(error.response.data.message);
+        setError(error.response.data.message || "An error occurred");
 }finally{
   setLoading(false)
 }
@@ -79,7 +81,7 @@ async function handlesubmit(event:any){
               </div>
 
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full" onClick={handlesubmit}>
+                <Button type="submit" className="w-full transition-all duration-200 transform hover:-translate-0.5" onClick={handlesubmit}>
                  {Loading?<LoadingSpinner/>:"Send OTP"}
                 </Button>
                
@@ -87,9 +89,9 @@ async function handlesubmit(event:any){
             </div>
             <div className="mt-4 text-center text-sm">
               Remembered your password?{" "}
-              <a href="/signup" className="underline underline-offset-4">
+              <Link to="/signin" className="underline underline-offset-4">
                 Sign in
-              </a>
+              </Link>
             </div>
               {/* Show error message if exists */}
               {Error.startsWith("Please")?<p style={{ color: "green" }}>{Error}</p>: <p style={{ color: "red" }}>{Error}</p>}

@@ -29,6 +29,8 @@ const [Message,setMessage]=useState("");
 const navigate=useNavigate();
 const location = useLocation();
 const email = location.state?.email || "No Email Provided"; 
+
+console.log(email);
 // sending request to backend
 async function handlesubmit(event:React.FormEvent<HTMLFormElement>){
   event.preventDefault();
@@ -70,7 +72,7 @@ console.log(otp);
                 <div>
                   <InputOTPDemo otp={otp} setotp={setotp}/>
                 </div>
-                <Button type="submit" className="w-full" onClick={handlesubmit}>
+                <Button type="submit" className="w-full transition-all duration-200 transform hover:-translate-0.5" onClick={handlesubmit}>
                  verify otp
                 </Button>              
               </div>
