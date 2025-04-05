@@ -9,6 +9,7 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
+  assetsInclude: ['**/*.pdf'],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
